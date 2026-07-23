@@ -6,7 +6,7 @@ function ImageUploader({ onUpload }) {
     const onDrop = useCallback(async (acceptedFiles) => {
         const formData = new FormData();
         formData.append("file", acceptedFiles[0]);
-        const res = await axios.post("http://localhost:3001/upload", formData);
+        const res = await axios.post("https://rahib-cv-management-system.onrender.com/upload", formData);
         onUpload(res.data.url);
     }, [onUpload]);
 

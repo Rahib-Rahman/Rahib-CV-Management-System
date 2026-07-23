@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API = axios.create({ baseURL: "http://localhost:3001/api" });
+export const API = axios.create({ baseURL: "https://rahib-cv-management-system.onrender.com/api" });
 
 API.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");

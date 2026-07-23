@@ -141,7 +141,7 @@ function AttributeLibrary() {
                 </button>
             </form>
 
-            {/* Attribute list */}
+
             <ul className="list-group">
                 {attributes.map((attr) => (
                     <li

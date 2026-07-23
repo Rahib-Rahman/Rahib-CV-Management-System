@@ -49,11 +49,11 @@ function Auth() {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:3001/api/auth/google";
+        window.location.href = "https://rahib-cv-management-system.onrender.com/api/auth/google";
     };
 
     const handleFacebookLogin = () => {
-        window.location.href = "http://localhost:3001/api/auth/facebook";
+        window.location.href = "https://rahib-cv-management-system.onrender.com/api/auth/facebook";
     };
 
     return (

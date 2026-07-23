@@ -17,7 +17,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="3FIENXexJkGDrBIH9wpr9KP2BSt" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -87,6 +87,7 @@
       <workItem from="1784727347166" duration="10758000" />
       <workItem from="1784741163176" duration="1586000" />
       <workItem from="1784744697721" duration="14472000" />
+      <workItem from="1784773498795" duration="2300000" />
     </task>
     <servers />
   </component>
