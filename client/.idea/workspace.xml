@@ -10,13 +10,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e183e7f0-39da-4c5a-8d29-27ae09e13020" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../server/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/config/passport.js" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/config/passport.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/routes/authRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/routes/authRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/routes/pdfExportRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/routes/pdfExportRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/src/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/../server/src/server.js" afterDir="false" />
-    </list>
+    <list default="true" id="e183e7f0-39da-4c5a-8d29-27ae09e13020" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -95,7 +89,7 @@
       <workItem from="1784744697721" duration="14472000" />
       <workItem from="1784773498795" duration="2300000" />
       <workItem from="1784776591173" duration="15000" />
-      <workItem from="1784777014242" duration="2272000" />
+      <workItem from="1784777014242" duration="2491000" />
     </task>
     <servers />
   </component>
