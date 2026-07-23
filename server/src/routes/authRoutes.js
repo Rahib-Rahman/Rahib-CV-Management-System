@@ -66,22 +66,22 @@ router.get ("/google",
 );
 
 router.get ("/google/callback",
-    passport.authenticate("google", { failureRedirect: "http://localhost:5173/login", session: false }),
+    passport.authenticate("google", { failureRedirect: "https://rahib-cv-management-system.netlify.app/login", session: false }),
     async (req, res) => {
         try {
             const user = req.user;
             if (user.blocked) {
-                return res.redirect("http://localhost:5173/login?error=blocked");
+                return res.redirect("https://rahib-cv-management-system.netlify.app/login?error=blocked");
             }
             const token = jwt.sign(
                 { id: user.id, role: user.role },
                 process.env.JWT_SECRET,
                 { expiresIn: "1h" }
             );
-            res.redirect(`http://localhost:5173/oauth-success?token=${token}`);
+            res.redirect(`https://rahib-cv-management-system.netlify.app/oauth-success?token=${token}`);
         } catch (err) {
             console.error("Google login error:", err);
-            res.redirect("http://localhost:5173/login");
+            res.redirect("https://rahib-cv-management-system.netlify.app/login");
         }
     }
 );
@@ -91,13 +91,13 @@ router.get ("/facebook",
 );
 
 router.get ("/facebook/callback",
-    passport.authenticate("facebook", { failureRedirect: "http://localhost:5173/login", session: false }),
+    passport.authenticate("facebook", { failureRedirect: "https://rahib-cv-management-system.netlify.app/login", session: false }),
     async (req, res) => {
         try {
             const user = req.user;
 
             if (user.blocked) {
-                return res.redirect("http://localhost:5173/login?error=blocked");
+                return res.redirect("https://rahib-cv-management-system.netlify.app/login?error=blocked");
             }
 
             const token = jwt.sign(
@@ -105,10 +105,10 @@ router.get ("/facebook/callback",
                 process.env.JWT_SECRET,
                 { expiresIn: "1h" }
             );
-            res.redirect(`http://localhost:5173/oauth-success?token=${token}`);
+            res.redirect(`https://rahib-cv-management-system.netlify.app/oauth-success?token=${token}`);
         } catch (err) {
             console.error("Facebook login error:", err);
-            res.redirect("http://localhost:5173/login");
+            res.redirect("https://rahib-cv-management-system.netlify.app/login");
         }
     }
 );

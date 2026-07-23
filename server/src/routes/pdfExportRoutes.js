@@ -18,7 +18,7 @@ router.get ("/:cvId/pdf", authenticate, authorize(["recruiter", "admin"]), async
         const cv = await CV.findByPk(req.params.cvId, { include: [User, Position, Project] });
          if (!cv) return res.status(404).json({ error: "CV not found" });
         const likeCount = await Like.count({ where: { cvId: cv.id } });
-         const qrUrl = `http://localhost:5173/cv/${cv.id}`;
+         const qrUrl = `https://rahib-cv-management-system.netlify.app/cv/${cv.id}`;
         const qrData = await QRCode.toDataURL(qrUrl);
 
         const translations = {
