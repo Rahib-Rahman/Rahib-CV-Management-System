@@ -32,7 +32,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Others/Final Submission Project/Latest/Rahib-CV-Management-System/client" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -92,6 +92,9 @@
       <workItem from="1784777014242" duration="8315000" />
       <workItem from="1785019636669" duration="3774000" />
       <workItem from="1785100060493" duration="20000" />
+      <workItem from="1785191642814" duration="1791000" />
+      <workItem from="1785194415317" duration="510000" />
+      <workItem from="1785232863540" duration="81000" />
     </task>
     <servers />
   </component>
@@ -122,10 +125,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="412" y="110" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.728@0.0.1366.728" timestamp="1784679164380" />
-    <state x="462" y="118" key="FileChooserDialogImpl" timestamp="1784490720418">
+    <state x="462" y="118" key="FileChooserDialogImpl" timestamp="1785194563870">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="462" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1784490720418" />
+    <state x="462" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1785194563870" />
     <state width="1343" height="150" key="GridCell.Tab.0.bottom" timestamp="1784782334736">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

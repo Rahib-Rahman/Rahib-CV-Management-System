@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -25,6 +24,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 import badgeRoutes from "./routes/badgeRoutes.js";
 import mainRoutes from "./routes/mainRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
+import salesforceRoutes from "./routes/salesforceRoutes.js";
 
 const app = express();
 
@@ -32,14 +32,17 @@ app.use(session({
     secret: process.env.SESSION_SECRET || "supersecret",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    cookie: {
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax"
+    }
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
@@ -59,7 +62,11 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/badges", badgeRoutes);
 app.use("/api/main", mainRoutes);
 app.use("/api/search", searchRoutes);
+app.use("/api/salesforce", salesforceRoutes);
+
+app.use((err, req, res, next) => {
+    console.error("Unhandled error:", err.stack);
+    res.status(500).json({ error: "Something went wrong!" });
+});
 
 export default app;
-
-
