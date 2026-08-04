@@ -4,6 +4,8 @@ import { getCVs, createCV, publishCV, deleteCV } from "../services/api";
 function CVs() {
     const [cvs, setCVs] = useState([]);
     const [positionId, setPositionId] = useState("");
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
 
     useEffect(() => {
         const fetchCVs = async () => {
@@ -12,7 +14,7 @@ function CVs() {
                 setCVs(res.data);
             } catch (err) {
                 console.error("Failed to fetch CVs:", err);
-                alert("Error loading CVs");
+                setError("Error loading CVs");
             }
         };
         fetchCVs();
@@ -20,16 +22,18 @@ function CVs() {
 
     const handleCreate = async () => {
         if (!positionId) {
-            alert("Please enter a position ID");
+            setError("Please enter a position ID");
             return;
         }
         try {
             const res = await createCV({ positionId });
             setCVs((prev) => [...prev, res.data]);
             setPositionId("");
+            setSuccess("CV created successfully!");
+            setError(null);
         } catch (err) {
             console.error("Create CV error:", err);
-            alert("Failed to create CV");
+            setError("Failed to create CV");
         }
     };
 
@@ -41,13 +45,14 @@ function CVs() {
                     cv.id === id ? { ...cv, published: true, version: res.data.version } : cv
                 )
             );
-            alert("CV published!");
+            setSuccess("CV published successfully!");
+            setError(null);
         } catch (err) {
             console.error("Publish CV error:", err);
             if (err.response?.data?.missing) {
-                alert("Missing attributes: " + err.response.data.missing.join(", "));
+                setError("Missing attributes: " + err.response.data.missing.join(", "));
             } else {
-                alert("Failed to publish CV");
+                setError("Failed to publish CV");
             }
         }
     };
@@ -56,15 +61,20 @@ function CVs() {
         try {
             await deleteCV(id);
             setCVs((prev) => prev.filter((cv) => cv.id !== id));
+            setSuccess("CV deleted successfully!");
+            setError(null);
         } catch (err) {
             console.error("Delete CV error:", err);
-            alert("Failed to delete CV");
+            setError("Failed to delete CV");
         }
     };
 
     return (
         <div className="container mt-5">
             <h2>CVs</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
+            {success && <div className="alert alert-success">{success}</div>}
+
             <input
                 type="text"
                 placeholder="Position ID"
@@ -78,12 +88,18 @@ function CVs() {
 
             <ul className="list-group mt-4">
                 {cvs.map((cv) => (
-                    <li key={cv.id} className="list-group-item d-flex justify-content-between">
+                    <li
+                        key={cv.id}
+                        className="list-group-item d-flex justify-content-between align-items-center"
+                    >
                         <div>
                             <strong>CV #{cv.id}</strong> — Position ID: {cv.positionId}
                             {cv.position?.title && <span> ({cv.position.title})</span>}
                             <br />
                             Published: {cv.published ? "Yes" : "No"} | Version: {cv.version || 0}
+                            {cv.attributes && cv.attributes.length > 0 && (
+                                <div>Attributes: {cv.attributes.join(", ")}</div>
+                            )}
                         </div>
                         <div>
                             {!cv.published && (
@@ -109,5 +125,3 @@ function CVs() {
 }
 
 export default CVs;
-
-

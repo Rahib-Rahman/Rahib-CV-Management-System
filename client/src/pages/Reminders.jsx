@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {getReminders, createReminder, deleteReminder,} from "../services/api";
+import { getReminders, createReminder, deleteReminder } from "../services/api";
 
 function Reminders() {
     const [reminders, setReminders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [text, setText] = useState("");
+    const [dueDate, setDueDate] = useState("");
+    const [reminderType, setReminderType] = useState("popup");
 
     const fetchReminders = async () => {
         try {
@@ -27,11 +30,14 @@ function Reminders() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!text.trim()) return;
+        if (!text.trim() || !dueDate) return;
         try {
-            await createReminder({ text });
+            const res = await createReminder({ text, dueDate, type: reminderType });
+            setReminders((prev) => [...prev, res.data]);
             setText("");
-            fetchReminders();
+            setDueDate("");
+            setSuccess("Reminder added successfully!");
+            setError("");
         } catch (err) {
             console.error("Create reminder error:", err);
             setError("Failed to create reminder");
@@ -42,7 +48,9 @@ function Reminders() {
         if (!window.confirm("Are you sure you want to delete this reminder?")) return;
         try {
             await deleteReminder(id);
-            fetchReminders();
+            setReminders((prev) => prev.filter((r) => r.id !== id));
+            setSuccess("Reminder deleted successfully!");
+            setError("");
         } catch (err) {
             console.error("Delete reminder error:", err);
             setError("Failed to delete reminder");
@@ -50,14 +58,16 @@ function Reminders() {
     };
 
     if (loading) return <div className="container mt-5">Loading reminders...</div>;
-    if (error) return <div className="container mt-5 text-danger">{error}</div>;
 
     return (
         <div className="container mt-5">
             <h2>Your Reminders</h2>
 
+            {error && <div className="alert alert-danger">{error}</div>}
+            {success && <div className="alert alert-success">{success}</div>}
+
             <form onSubmit={handleSubmit} className="mb-4">
-                <div className="input-group">
+                <div className="mb-2">
                     <input
                         type="text"
                         value={text}
@@ -66,10 +76,29 @@ function Reminders() {
                         placeholder="Enter reminder text"
                         required
                     />
-                    <button type="submit" className="btn btn-primary">
-                        Add Reminder
-                    </button>
                 </div>
+                <div className="mb-2">
+                    <input
+                        type="datetime-local"
+                        value={dueDate}
+                        onChange={(e) => setDueDate(e.target.value)}
+                        className="form-control"
+                        required
+                    />
+                </div>
+                <div className="mb-2">
+                    <select
+                        value={reminderType}
+                        onChange={(e) => setReminderType(e.target.value)}
+                        className="form-select"
+                    >
+                        <option value="popup">Popup Notification</option>
+                        <option value="email">Email Notification</option>
+                    </select>
+                </div>
+                <button type="submit" className="btn btn-primary">
+                    Add Reminder
+                </button>
             </form>
 
             {reminders.length > 0 ? (
@@ -79,7 +108,17 @@ function Reminders() {
                             key={r.id}
                             className="list-group-item d-flex justify-content-between align-items-center"
                         >
-                            <span>{r.text}</span>
+              <span>
+                {r.text}
+                  {r.dueDate && (
+                      <small className="text-muted ms-2">
+                          ({new Date(r.dueDate).toLocaleString()})
+                      </small>
+                  )}
+                  {r.type && (
+                      <small className="text-muted ms-2">[{r.type}]</small>
+                  )}
+              </span>
                             <button
                                 className="btn btn-sm btn-danger"
                                 onClick={() => handleDelete(r.id)}
@@ -97,4 +136,3 @@ function Reminders() {
 }
 
 export default Reminders;
-

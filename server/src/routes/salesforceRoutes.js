@@ -17,7 +17,7 @@ router.post("/salesforce-sync/:userId", authenticate, async (req, res) => {
         }
 
         const user = await User.findByPk(id, {
-            include: { model: Profile, as: "profile" }
+            include: { model: Profile, as: "profile" },
         });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
@@ -28,13 +28,13 @@ router.post("/salesforce-sync/:userId", authenticate, async (req, res) => {
         res.json({
             success: true,
             accountId: result.accountId,
-            contactId: result.contactId
+            contactId: result.contactId,
         });
     } catch (err) {
         console.error("Salesforce sync error:", err.response?.data || err.message);
         res.status(500).json({
             error: "Failed to sync user to Salesforce",
-            details: err.response?.data || err.message
+            details: err.response?.data || err.message,
         });
     }
 });

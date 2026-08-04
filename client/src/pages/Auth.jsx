@@ -6,59 +6,81 @@ import { useNavigate, useLocation } from "react-router-dom";
 function Auth() {
     const { setUser } = useContext(AuthContext);
     const [isRegister, setIsRegister] = useState(false);
-    const [form, setForm] = useState({ name: "", email: "", password: "", role: "candidate" });
+    const [form, setForm] = useState({
+        name: "",
+        email: "",
+        password: "",
+        role: "candidate",
+    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
 
+    const API_URL = "https://rahib-cv-management-system.onrender.com";
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const error = params.get("error");
-        if (error === "blocked") {
-            alert("Your account is blocked. Please contact admin.");
+        const err = params.get("error");
+        if (err === "blocked") {
+            setError("Your account is blocked. Please contact admin.");
         }
     }, [location]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
+
     const handleRegister = async () => {
         try {
+            setLoading(true);
+            setError(null);
             await register(form);
-            alert("Registration successful! Please login.");
+            setSuccess("Registration successful! Please login.");
             setIsRegister(false);
         } catch (err) {
             console.error("Registration failed:", err);
-            alert(err.response?.data?.error || "Registration failed");
+            setError(err.response?.data?.error || "Registration failed");
+        } finally {
+            setLoading(false);
         }
     };
+
     const handleLogin = async () => {
         try {
+            setLoading(true);
+            setError(null);
             const res = await login({ email: form.email, password: form.password });
             localStorage.setItem("token", res.data.token);
             setUser(res.data.user);
-            alert("Login successful!");
             navigate("/");
         } catch (err) {
             console.error("Login failed:", err);
             if (err.response?.status === 403) {
-                alert("Your account is blocked. Please contact admin.");
+                setError("Your account is blocked. Please contact admin.");
             } else {
-                alert(err.response?.data?.error || "Login failed");
+                setError(err.response?.data?.error || "Login failed");
             }
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = "https://rahib-cv-management-system.onrender.com/api/auth/google";
+        window.location.href = `${API_URL}/api/auth/google`;
     };
 
     const handleFacebookLogin = () => {
-        window.location.href = "https://rahib-cv-management-system.onrender.com/api/auth/facebook";
+        window.location.href = `${API_URL}/api/auth/facebook`;
     };
 
     return (
         <div className="container mt-5">
             <h2>{isRegister ? "Register" : "Login"}</h2>
+
+            {error && <div className="alert alert-danger">{error}</div>}
+            {success && <div className="alert alert-success">{success}</div>}
 
             {isRegister && (
                 <input
@@ -104,8 +126,9 @@ function Auth() {
             <button
                 onClick={isRegister ? handleRegister : handleLogin}
                 className="btn btn-primary mt-3"
+                disabled={loading}
             >
-                {isRegister ? "Register" : "Login"}
+                {loading ? "Processing..." : isRegister ? "Register" : "Login"}
             </button>
 
             <button

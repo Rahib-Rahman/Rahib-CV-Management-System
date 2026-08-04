@@ -5,7 +5,7 @@ import { logAction } from "../utils/logAction.js";
 
 const router = express.Router();
 
-router.get ("/", authenticate, async (req, res) => {
+router.get("/", authenticate, async (req, res) => {
     try {
         const reminders = await Reminder.findAll({
             where: { userId: req.user.id },
@@ -18,37 +18,42 @@ router.get ("/", authenticate, async (req, res) => {
     }
 });
 
-router.post ("/", authenticate, async (req, res) => {
-    try  {
-         const { text } = req.body;
+router.post("/", authenticate, async (req, res) => {
+    try {
+        const { text, dueDate, type } = req.body;
         if (!text) {
-             return res.status(400).json({ error: "Reminder text is required" });
+            return res.status(400).json({ error: "Reminder text is required" });
         }
-         const reminder = await Reminder.create({
+
+        const reminder = await Reminder.create({
             text,
-             userId: req.user.id,
+            userId: req.user.id,
+            dueDate: dueDate || null,
+            type: type || "popup",
         });
 
-         await logAction("Reminder", reminder.id, "create", req.user.id);
+        await logAction("Reminder", reminder.id, "create", req.user.id);
 
         res.json(reminder);
-    }  catch (err) {
-         console.error("Error creating reminder:", err);
+    } catch (err) {
+        console.error("Error creating reminder:", err);
         res.status(500).json({ error: "Failed to create reminder" });
     }
 });
 
-router.delete ("/:id", authenticate, async (req, res) => {
+router.delete("/:id", authenticate, async (req, res) => {
     try {
-         const reminder = await Reminder.findOne({
+        const reminder = await Reminder.findOne({
             where: { id: req.params.id, userId: req.user.id },
         });
-        if  (!reminder) return res.status(404).json({ error: "Reminder not found" });
-         await reminder.destroy();
+        if (!reminder) return res.status(404).json({ error: "Reminder not found" });
+
+        await reminder.destroy();
         await logAction("Reminder", req.params.id, "delete", req.user.id);
+
         res.json({ message: "Reminder deleted successfully" });
     } catch (err) {
-         console.error("Error deleting reminder:", err);
+        console.error("Error deleting reminder:", err);
         res.status(500).json({ error: "Failed to delete reminder" });
     }
 });

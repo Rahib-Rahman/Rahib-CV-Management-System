@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { getPositions, createPosition, updatePosition, deletePosition } from "../services/api";
+import {getPositions, createPosition, updatePosition, deletePosition} from "../services/api";
+import PositionTokenButton from "../components/Positions/PositionTokenButton";
 
 function Positions() {
     const [positions, setPositions] = useState([]);
     const [form, setForm] = useState({
-        title: "", description: "", accessRules: {}, attributes: [], projectTags: [], maxProjects: 0,
+        title: "",
+        description: "",
+        accessRules: {},
+        attributes: [],
+        projectTags: [],
+        maxProjects: 0,
     });
     const [editingId, setEditingId] = useState(null);
 
@@ -26,7 +32,13 @@ function Positions() {
     };
 
     const handleArrayChange = (e, field) => {
-        setForm({ ...form, [field]: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) });
+        setForm({
+            ...form,
+            [field]: e.target.value
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean),
+        });
     };
 
     const handleSubmit = async (e) => {
@@ -34,13 +46,22 @@ function Positions() {
         try {
             if (editingId) {
                 const res = await updatePosition(editingId, form);
-                setPositions((prev) => prev.map((p) => (p.id === editingId ? res.data : p)));
+                setPositions((prev) =>
+                    prev.map((p) => (p.id === editingId ? res.data : p))
+                );
                 setEditingId(null);
             } else {
                 const res = await createPosition(form);
                 setPositions((prev) => [...prev, res.data]);
             }
-            setForm({ title: "", description: "", accessRules: {}, attributes: [], projectTags: [], maxProjects: 0 });
+            setForm({
+                title: "",
+                description: "",
+                accessRules: {},
+                attributes: [],
+                projectTags: [],
+                maxProjects: 0,
+            });
         } catch (err) {
             console.error("Save position error:", err);
             alert("Failed to save position");
@@ -122,7 +143,10 @@ function Positions() {
 
             <ul className="list-group mt-4">
                 {positions.map((p) => (
-                    <li key={p.id} className="list-group-item d-flex justify-content-between align-items-center">
+                    <li
+                        key={p.id}
+                        className="list-group-item d-flex justify-content-between align-items-center"
+                    >
                         <div>
                             <strong>{p.title}</strong>
                             <br />
@@ -133,12 +157,20 @@ function Positions() {
                             Tags: {p.projectTags?.join(", ") || "None"}
                             <br />
                             Max Projects: {p.maxProjects}
+                            {/* 🔗 Recruiter utility: Generate API token */}
+                            <PositionTokenButton positionId={p.id} />
                         </div>
                         <div>
-                            <button onClick={() => handleEdit(p)} className="btn btn-warning btn-sm me-2">
+                            <button
+                                onClick={() => handleEdit(p)}
+                                className="btn btn-warning btn-sm me-2"
+                            >
                                 Edit
                             </button>
-                            <button onClick={() => handleDelete(p.id)} className="btn btn-danger btn-sm">
+                            <button
+                                onClick={() => handleDelete(p.id)}
+                                className="btn btn-danger btn-sm"
+                            >
                                 Delete
                             </button>
                         </div>

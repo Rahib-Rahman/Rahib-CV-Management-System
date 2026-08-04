@@ -5,6 +5,8 @@ import Project from "./Project.js";
 import Like from "./Like.js";
 import Reminder from "./Reminder.js";
 import Profile from "./Profile.js";
+import Discussion from "./Discussion.js";
+import ApiToken from "./ApiToken.js";
 
 User.hasMany(CV, { foreignKey: "userId", as: "cvs", onDelete: "CASCADE", onUpdate: "CASCADE" });
 CV.belongsTo(User, { foreignKey: "userId", as: "user", onDelete: "CASCADE", onUpdate: "CASCADE" });
@@ -24,4 +26,13 @@ Reminder.belongsTo(User, { foreignKey: "userId", as: "user", onDelete: "CASCADE"
 User.hasOne(Profile, { foreignKey: "userId", as: "profile", onDelete: "CASCADE", onUpdate: "CASCADE" });
 Profile.belongsTo(User, { foreignKey: "userId", as: "user", onDelete: "CASCADE", onUpdate: "CASCADE" });
 
-export { User, CV, Position, Project, Like, Reminder, Profile };
+Position.hasMany(Discussion, { foreignKey: "positionId", as: "discussions", onDelete: "CASCADE", onUpdate: "CASCADE" });
+Discussion.belongsTo(Position, { foreignKey: "positionId", as: "position", onDelete: "CASCADE", onUpdate: "CASCADE" });
+
+User.hasMany(Discussion, { foreignKey: "userId", as: "discussions", onDelete: "CASCADE", onUpdate: "CASCADE" });
+Discussion.belongsTo(User, { foreignKey: "userId", as: "user", onDelete: "CASCADE", onUpdate: "CASCADE" });
+
+Position.hasMany(ApiToken, { foreignKey: "positionId", as: "tokens", onDelete: "CASCADE", onUpdate: "CASCADE" });
+ApiToken.belongsTo(Position, { foreignKey: "positionId", as: "position", onDelete: "CASCADE", onUpdate: "CASCADE" });
+
+export { User, CV, Position, Project, Like, Reminder, Profile, Discussion, ApiToken };

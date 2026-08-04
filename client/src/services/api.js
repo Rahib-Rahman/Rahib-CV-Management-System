@@ -1,6 +1,8 @@
 import axios from "axios";
 
-export const API = axios.create({ baseURL: "https://rahib-cv-management-system.onrender.com/api" });
+export const API = axios.create({
+    baseURL: "https://rahib-cv-management-system.onrender.com/api",
+});
 
 API.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
@@ -16,9 +18,11 @@ API.interceptors.response.use(
         if (error.response?.status === 401 || error.response?.status === 403) {
             localStorage.removeItem("token");
             window.dispatchEvent(new Event("logout"));
+
             if (window.location.pathname !== "/login") {
                 window.location.href = "/login";
             }
+
             alert(error.response?.data?.error || "You have been logged out.");
         }
         return Promise.reject(error);
@@ -85,7 +89,7 @@ export const deleteUser = (id) => API.delete(`/admin/users/${id}`);
 // Badges
 export const getBadges = () => API.get("/badges");
 
-// Stats (global + achievements)
+// Stats
 export const getStats = () => API.get("/stats");
 export const getAchievements = () => API.get("/stats/achievements");
 
@@ -98,7 +102,10 @@ export const deleteReminder = (id) => API.delete(`/reminders/${id}`);
 export const getAuditLogs = () => API.get("/audit");
 
 // Uploads
-export const uploadFile = (formData) => API.post("/upload", formData);
+export const uploadFile = (formData) =>
+    API.post("/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
 
 // ExportCVs
 export const exportCVsToCSV = (positionId) =>
@@ -110,3 +117,13 @@ export const exportCVsToExcel = (positionId) =>
 export const exportCVToPDF = (cvId, lang = "en") =>
     API.get(`/pdf/${cvId}/pdf?lang=${lang}`, { responseType: "blob" });
 
+// Odoo Integration
+export const generateToken = (positionId) => API.post(`/tokens/${positionId}`);
+export const getAggregatedResults = (token) => API.get(`/aggregate/${token}`);
+
+// Salesforce Sync
+export const syncUserToSalesforce = (userId, extraInfo = {}) =>
+    API.post(`/salesforce/salesforce-sync/${userId}`, extraInfo);
+
+// Support Ticket (Power Automate Integration)
+export const createSupportTicket = (ticketData) => API.post("/support", ticketData);

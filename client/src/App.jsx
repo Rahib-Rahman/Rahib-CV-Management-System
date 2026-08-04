@@ -22,6 +22,9 @@ import Upload from "./pages/Upload";
 import Likes from "./pages/Likes";
 import Badges from "./pages/Badges";
 import Stats from "./pages/Stats";
+import OdooIntegration from "./pages/OdooIntegration";
+import SalesforceSync from "./pages/SalesforceSync";
+import SupportTicket from "./pages/SupportTicket";
 
 // Dashboards
 import DashboardCandidate from "./pages/DashboardCandidate";
@@ -55,11 +58,7 @@ function Navbar() {
     };
 
     return (
-        <nav
-            className={`navbar navbar-expand-lg ${
-                theme === "dark" ? "navbar-dark bg-dark" : "navbar-light bg-light"
-            }`}
-        >
+        <nav className={`navbar navbar-expand-lg ${theme === "dark" ? "navbar-dark bg-dark" : "navbar-light bg-light"}`}>
             <div className="container">
                 <Link className="navbar-brand" to="/">
                     {t("dashboard")}
@@ -92,8 +91,13 @@ function Navbar() {
                             <li className="nav-item"><Link className="nav-link" to="/export">Export CVs</Link></li>
                             <li className="nav-item"><Link className="nav-link" to="/stats">Stats</Link></li>
                             <li className="nav-item"><Link className="nav-link" to="/attribute-library">Attribute Library</Link></li>
+                            <li className="nav-item"><Link className="nav-link" to="/odoo-integration">Odoo Integration</Link></li>
+                            <li className="nav-item"><Link className="nav-link" to="/salesforce-sync">Salesforce Sync</Link></li>
                         </>
                     )}
+
+                    <li className="nav-item"><Link className="nav-link" to="/support-ticket">Help</Link></li>
+
                     {!user && (
                         <li className="nav-item"><Link className="nav-link" to="/auth">Login / Register</Link></li>
                     )}
@@ -143,22 +147,26 @@ function App() {
 
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/cvs" element={<CVs />} />
-                <Route path="/cv/:id" element={<CVDetail cvId={1} />} />
+                <Route path="/cv/:id" element={<CVDetail />} />
                 <Route path="/reminders" element={<Reminders />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/attributes" element={<Attributes />} />
                 <Route path="/attribute-library" element={<AttributeLibrary />} />
 
                 <Route path="/positions" element={<Positions />} />
-                <Route path="/discussions" element={<Discussions positionId={1} />} />
-                <Route path="/likes" element={<Likes cvId={1} />} />
+                <Route path="/discussions" element={<Discussions />} />
+                <Route path="/likes" element={<Likes />} />
 
                 <Route path="/admin" element={<AdminPanel />} />
                 <Route path="/audit" element={<AuditLogs />} />
                 <Route path="/upload" element={<Upload />} />
                 <Route path="/badges" element={<Badges />} />
-                <Route path="/export" element={<ExportCVs positionId={1} />} />
+                <Route path="/export" element={<ExportCVs />} />
                 <Route path="/stats" element={<Stats />} />
+                <Route path="/odoo-integration" element={<OdooIntegration />} />
+                <Route path="/salesforce-sync" element={<SalesforceSync />} />
+
+                <Route path="/support-ticket" element={<SupportTicket positionTitle="General" />} />
 
                 <Route path="/image-uploader" element={<ImageUploader />} />
             </Routes>

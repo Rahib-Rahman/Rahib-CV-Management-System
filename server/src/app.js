@@ -6,6 +6,7 @@ dotenv.config();
 import session from "express-session";
 import passport from "./config/passport.js";
 
+// Import routes
 import authRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
@@ -25,25 +26,35 @@ import badgeRoutes from "./routes/badgeRoutes.js";
 import mainRoutes from "./routes/mainRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
 import salesforceRoutes from "./routes/salesforceRoutes.js";
+import supportRoutes from "./routes/supportRoutes.js";
+
+// Odoo integration routes
+import tokenRoutes from "./routes/tokenRoutes.js";
+import aggregateRoutes from "./routes/aggregateRoutes.js";
 
 const app = express();
 
-app.use(session({
-    secret: process.env.SESSION_SECRET || "supersecret",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax"
-    }
-}));
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET || "supersecret",
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+        },
+    })
+);
 
+// Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
+// CORS + JSON parsing
 app.use(cors());
 app.use(express.json());
 
+// Mount routes
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/projects", projectRoutes);
@@ -63,6 +74,12 @@ app.use("/api/badges", badgeRoutes);
 app.use("/api/main", mainRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/salesforce", salesforceRoutes);
+app.use("/api/support", supportRoutes);
+
+// Odoo integration endpoints
+app.use("/api/tokens", tokenRoutes);
+app.use("/api/aggregate", aggregateRoutes);
+
 
 app.use((err, req, res, next) => {
     console.error("Unhandled error:", err.stack);

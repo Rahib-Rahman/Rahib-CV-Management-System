@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { getProfile, updateProfile, getAttributes } from "../services/api";
 
+import SalesforceSyncButton from "../components/Profile/SalesforceSyncButton";
+import SupportTicketButton from "../components/Support/SupportTicketButton";
+
 function Profile() {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
@@ -95,7 +99,7 @@ function Profile() {
                 version: res.data.version || 0,
             });
             setError("");
-            alert("Profile updated successfully!");
+            setSuccess("Profile updated successfully!");
         } catch (err) {
             console.error("Profile update error:", err);
             if (err.response?.status === 409) {
@@ -112,6 +116,7 @@ function Profile() {
     return (
         <div className="container mt-5">
             <h2>Your Profile</h2>
+            {success && <div className="alert alert-success">{success}</div>}
             {profile && (
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
@@ -193,12 +198,14 @@ function Profile() {
                     </button>
                 </form>
             )}
+
+            <div className="container mt-5">
+                <SalesforceSyncButton userId={profile?.id} />
+                <SupportTicketButton user={profile} />
+            </div>
         </div>
     );
 }
 
 export default Profile;
-
-
-
 

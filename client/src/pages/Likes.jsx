@@ -1,45 +1,68 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { getLikes, addLike, removeLike } from "../services/api";
+import { io } from "socket.io-client";
 
-function Likes({ cvId }) {
+function Likes() {
+    const { id } = useParams();
+    const cvId = parseInt(id, 10);
     const [likes, setLikes] = useState(0);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchLikes = async () => {
+            if (!cvId) return;
             try {
                 const res = await getLikes(cvId);
                 setLikes(res.data.likes);
             } catch (err) {
                 console.error("Failed to fetch likes:", err);
-                alert("Error loading likes");
+                setError("Error loading likes");
             }
         };
         fetchLikes();
     }, [cvId]);
 
+    useEffect(() => {
+        const API_URL = "https://rahib-cv-management-system.onrender.com";
+        const socket = io(API_URL);
+
+        socket.on("likeUpdated", (likeData) => {
+            if (likeData.cvId === cvId) {
+                setLikes(likeData.likes);
+            }
+        });
+
+        return () => socket.disconnect();
+    }, [cvId]);
+
     const handleAdd = async () => {
         try {
-            await addLike(cvId);
-            setLikes((prev) => prev + 1);
+            const res = await addLike(cvId);
+            setLikes(res.data.likes ?? likes + 1);
+            setError(null);
         } catch (err) {
             console.error("Add like error:", err);
-            alert("You may have already liked this CV");
+            setError("You may have already liked this CV");
         }
     };
 
     const handleRemove = async () => {
         try {
-            await removeLike(cvId);
-            setLikes((prev) => Math.max(prev - 1, 0));
+            const res = await removeLike(cvId);
+            setLikes(res.data.likes ?? Math.max(0, likes - 1));
+            setError(null);
         } catch (err) {
             console.error("Remove like error:", err);
-            alert("Failed to remove like");
+            setError("Failed to remove like");
         }
     };
 
     return (
         <div className="mt-3">
+            <h4>Likes</h4>
             <p>Total Likes: {likes}</p>
+            {error && <div className="alert alert-danger">{error}</div>}
             <button onClick={handleAdd} className="btn btn-success me-2">
                 👍 Like
             </button>
@@ -51,4 +74,3 @@ function Likes({ cvId }) {
 }
 
 export default Likes;
-

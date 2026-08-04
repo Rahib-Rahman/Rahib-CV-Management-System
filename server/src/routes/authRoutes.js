@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Profile from "../models/Profile.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const router = express.Router();
 
@@ -57,13 +59,11 @@ router.post("/login", async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-        if (!process.env.JWT_SECRET) {
-            return res.status(500).json({ error: "JWT secret not configured" });
-        }
+        const secret = process.env.JWT_SECRET || "supersecret";
 
         const token = jwt.sign(
             { id: user.id, role: user.role },
-            process.env.JWT_SECRET,
+            secret,
             { expiresIn: "1h" }
         );
 
@@ -87,9 +87,10 @@ router.get("/google/callback",
             if (user.blocked) {
                 return res.redirect("https://rahib-cv-management-system.netlify.app/login?error=blocked");
             }
+            const secret = process.env.JWT_SECRET || "supersecret";
             const token = jwt.sign(
                 { id: user.id, role: user.role },
-                process.env.JWT_SECRET,
+                secret,
                 { expiresIn: "1h" }
             );
             res.redirect(`https://rahib-cv-management-system.netlify.app/oauth-success?token=${token}`);
@@ -112,9 +113,10 @@ router.get("/facebook/callback",
             if (user.blocked) {
                 return res.redirect("https://rahib-cv-management-system.netlify.app/login?error=blocked");
             }
+            const secret = process.env.JWT_SECRET || "supersecret";
             const token = jwt.sign(
                 { id: user.id, role: user.role },
-                process.env.JWT_SECRET,
+                secret,
                 { expiresIn: "1h" }
             );
             res.redirect(`https://rahib-cv-management-system.netlify.app/oauth-success?token=${token}`);

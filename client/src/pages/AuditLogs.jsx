@@ -43,12 +43,19 @@ function AuditLogs() {
         }
     }, [search, logs]);
 
+    const formatTimestamp = (log) => {
+        if (log.timestamp) return new Date(log.timestamp).toLocaleString();
+        if (log.createdAt) return new Date(log.createdAt).toLocaleString();
+        return "";
+    };
+
     if (loading) return <div className="container mt-5">Loading audit logs...</div>;
-    if (error) return <div className="container mt-5 text-danger">{error}</div>;
 
     return (
         <div className="container mt-5">
             <h2>Audit Logs</h2>
+
+            {error && <div className="alert alert-danger">{error}</div>}
 
             <div className="mb-3">
                 <input
@@ -82,13 +89,7 @@ function AuditLogs() {
                             <td>{log.action}</td>
                             <td>{log.entityType}</td>
                             <td>{log.entityId}</td>
-                            <td>
-                                {log.timestamp
-                                    ? new Date(log.timestamp).toLocaleString()
-                                    : log.createdAt
-                                        ? new Date(log.createdAt).toLocaleString()
-                                        : ""}
-                            </td>
+                            <td>{formatTimestamp(log)}</td>
                         </tr>
                     ))}
                     </tbody>

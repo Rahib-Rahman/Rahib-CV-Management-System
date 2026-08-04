@@ -27,6 +27,7 @@
     "qrcode": "^1.5.4",
     "react-tagcloud": "^2.3.3",
     "sequelize": "^6.37.8",
-    "socket.io": "^4.8.3"
+    "socket.io": "^4.8.3",
+    "uuid": "^14.0.1"
   }
 }
