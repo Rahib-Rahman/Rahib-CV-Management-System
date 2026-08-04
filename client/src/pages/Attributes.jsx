@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {getAttributes, createAttribute, updateAttribute, deleteAttribute,
-} from "../services/api";
+import {getAttributes, createAttribute, updateAttribute, deleteAttribute} from "../services/api";
 
 function Attributes() {
     const [attributes, setAttributes] = useState([]);

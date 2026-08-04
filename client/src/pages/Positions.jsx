@@ -157,7 +157,6 @@ function Positions() {
                             Tags: {p.projectTags?.join(", ") || "None"}
                             <br />
                             Max Projects: {p.maxProjects}
-                            {/* 🔗 Recruiter utility: Generate API token */}
                             <PositionTokenButton positionId={p.id} />
                         </div>
                         <div>
